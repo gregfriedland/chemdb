@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Biosynthesis pathway</title>
+  </head>
+  <script type="text/javascript" src="static/vis.js"></script>
+  <link href="static/vis-network.min.css" rel="stylesheet" type="text/css" />
+  <style type="text/css">
+    #mynetwork {
+      width: 1024px;
+      height: 960px;
+      border: 1px solid lightgray;
+    }
+  </style>
+</head>
+
+<div id="mynetwork"></div>
+
+<script type="text/javascript">
+  // create an array with nodes
+  var nodes = new vis.DataSet([
+    {% for n in nodes %}
+    {id: {{n.index}}, label: '{{n.name}}', color: '{{n.color}}'},
+    {% endfor %}
+  ]);
+
+  // create an array with edges
+  var edges = new vis.DataSet([
+    {% for e in edges %}
+    {from: {{e.node1}}, to: {{e.node2}}, arrows:'to'},
+    {% endfor %}
+  ]);
+
+  // create a network
+  var container = document.getElementById('mynetwork');
+  var data = {
+    nodes: nodes,
+    edges: edges
+  };
+    var options = {
+        layout: {
+          randomSeed: 2
+        },
+        nodes: {
+            font: {
+                size: 16
+            },
+            borderWidth: 2,
+            shadow: true
+        },
+        edges: {
+            width: 2,
+            shadow: true
+        }
+    };
+  var network = new vis.Network(container, data, options);
+</script>
+</body>
+</html>
