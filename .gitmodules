@@ -1,0 +1,3 @@
+[submodule "modules/biochem4j"]
+	path = modules/biochem4j
+	url = https://github.com/synbiochem/biochem4j.git

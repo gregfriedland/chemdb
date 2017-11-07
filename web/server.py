@@ -80,3 +80,10 @@ RETURN p""" % (req.args.get("id1", ""), max_length_rels, req.args.get("id2", "")
 
     # return r.text
     return render_template('pathway.html', meta=meta, nodes=nodes, edges=edges)
+
+@app.route("/ping")
+def ping():
+    return "OK"
+
+if __name__ == '__main__':
+    app.run(debug=False, host='0.0.0.0')

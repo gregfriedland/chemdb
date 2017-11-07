@@ -1,15 +1,18 @@
-FROM node:boron
+FROM ubuntu:latest
 
-# Create app directory
-WORKDIR /usr/src/app
+MAINTAINER Greg Friedland "greg.friedland@gmail.com"
 
-# Install app dependencies
-COPY package.json .
+RUN apt-get update -y
+RUN apt-get install -y python3-pip python3-dev
+# build-essential
 
-RUN npm install
+WORKDIR /app
 
-# Bundle app source
-COPY . .
+COPY requirements.txt /app
+RUN pip3 install -r requirements.txt
 
-EXPOSE 8080
-CMD [ "npm", "start" ]
+COPY . /app/
+
+EXPOSE 5000
+
+CMD ["python3", "server.py"]
