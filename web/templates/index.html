@@ -36,23 +36,24 @@ div {
 </head>
 <body>
 
-<h3>Search for chemicals</h3>
+<h3>Search for potential biosynthetic pathways from a root chemical</h3>
 
 <div>
   <form action="/chemical">
-    <label for="ChEBI ID">Root Chemical ChEBI ID</label>
-    <input type="text" id="chebi" name="chebi" value="28157">
+    <label for="chem_id">Root Chemical ID</label>
+    <input type="text" id="chem_id" name="chem_id" value="CHEBI:28157">
 
     <label for="min_mw">Minimum Molecular Weight</label>
     <input type="text" id="min_mw" name="min_mw" value="500">
 
-    <label for="max_length">Maximum Path Length</label>
-    <select id="max_length" name="max_length">
+    <label for="max_length">Maximum Chemical Path Length</label>
+    <select id="max_length" name="max_len">
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5" selected="selected">5</option>
       <option value="6">6</option>
       <option value="7">7</option>
-      <option value="8" selected="selected">8</option>
-      <option value="9">9</option>
-      <option value="10">10</option>
+      <option value="8">8</option>
     </select>
   
     <input type="submit" value="Submit">

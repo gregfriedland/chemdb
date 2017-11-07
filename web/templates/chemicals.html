@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chemicals biosynthesizable from {{fromChemical.id}}</title>
+    <link rel="stylesheet" href="static/main.css">
+  </head>
+</head>
+
+<h3>Potentially synthesizable chemicals from {{fromChemical.id}}</h3>
+
+<table id='table'>
+  <tr><th>Name</th><th>Id</th><th>Formula</th><th>Path Length</th></tr>
+    {% for c in chemicals %}
+    <tr><td>{{c.name}}</td><td>{{c.id}}</td><td>{{c.formula}}</td>
+      <td><a href="/pathway?id1={{fromChemical.id}}&id2={{c.id}}&path_len={{c.path_length}}">
+        {{c.path_length}}
+      </a></td>
+    </tr>
+    {% endfor %}
+</table>
+
+</body>
+</html>

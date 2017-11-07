@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Biosynthesis pathway</title>
+    <title>Biosynthesis pathway from {{meta.fromId}} to {{meta.toId}}</title>
   </head>
   <script type="text/javascript" src="static/vis.js"></script>
   <link href="static/vis-network.min.css" rel="stylesheet" type="text/css" />
   <style type="text/css">
     #mynetwork {
       width: 1024px;
-      height: 960px;
+      height: 600px;
       border: 1px solid lightgray;
     }
   </style>
 </head>
 
+<h3>Potential biosynthesis pathway from {{meta.fromId}} to {{meta.toId}}</h3>
 <div id="mynetwork"></div>
 
 <script type="text/javascript">
@@ -38,20 +39,25 @@
     edges: edges
   };
     var options = {
-        layout: {
-          randomSeed: 2
+      physics: {
+        barnesHut: {
+          gravitationalConstant: -5000
         },
-        nodes: {
-            font: {
-                size: 16
-            },
-            borderWidth: 2,
-            shadow: true
-        },
-        edges: {
-            width: 2,
-            shadow: true
-        }
+      },
+      layout: {
+        randomSeed: 2,
+      },
+      nodes: {
+          font: {
+              size: 16
+          },
+          borderWidth: 2,
+          shadow: true
+      },
+      edges: {
+          width: 2,
+          shadow: true
+      }
     };
   var network = new vis.Network(container, data, options);
 </script>

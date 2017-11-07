@@ -3,6 +3,17 @@ var app = express()
 var unirest = require('unirest');
 var util = require('util');
 
+var shortestStr(strs) {
+	strs.sort((a,b) => a.length < b.length);
+	return strs[0];
+}
+
+var tableify(rows) {
+	var cols = [];
+	for (var row in rows) {
+		
+	}
+}
 app.use(express.static('public'))
 
 app.get('/query', function (req, res) {
@@ -23,6 +34,10 @@ RETURN s`,
 			if (response.error) {
 				console.log("ERROR")
 			} else {
+				var data = [];
+				for (var row in response.body.results.data) {
+					data.push({"name": shortestStr(row.names), "names": row.names});
+				}
 	  			res.send(response.body);
 	  		}
 		});
