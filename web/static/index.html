@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+input[type=text], select {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+input[type=submit] {
+    width: 100%;
+    background-color: #4CAF50;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+
+div {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+    padding: 20px;
+}
+</style>
+</head>
+<body>
+
+<h3>Search for chemicals</h3>
+
+<div>
+  <form action="/query">
+    <label for="ChEBI ID">Root Chemical ChEBI ID</label>
+    <input type="text" id="chebi" name="chebi" value="28157">
+
+    <label for="min_mw">Minimum Molecular Weight</label>
+    <input type="text" id="min_mw" name="min_mw" value="500">
+
+    <label for="max_length">Maximum Path Length</label>
+    <select id="max_length" name="max_length">
+      <option value="6">6</option>
+      <option value="7">7</option>
+      <option value="8" selected="selected">8</option>
+      <option value="9">9</option>
+      <option value="10">10</option>
+    </select>
+  
+    <input type="submit" value="Submit">
+  </form>
+</div>
+
+</body>
