@@ -1,25 +1,12 @@
 {
-  "AWSEBDockerrunVersion": 2,
-  "volumes": [
-  ],
-  "authentication": {
-    "bucket": "gf-docker-auth",
-    "key": "docker_auth.json"
-  },  
-  "containerDefinitions": [
+  "AWSEBDockerrunVersion": "1",
+  "Image": {
+    "Name": "gregfriedland/zychemdb-web:1.0.0",
+    "Update": "true"
+  },
+  "Ports": [
     {
-      "name": "web",
-      "image": "gregfriedland/zychemdb-web:1.0.0",
-      "environment": [
-      ],
-      "essential": true,
-      "memory": 128,
-      "portMappings": [
-        {
-          "hostPort": 80,
-          "containerPort": 5000
-        }
-      ]
+      "ContainerPort": "5000"
     }
   ]
 }
