@@ -1,17 +1,20 @@
 from flask import Flask, render_template
 from flask import request as req
 import requests
-import json
 
 app = Flask(__name__)
 
+# Root path (static)
 @app.route("/")
 @app.route("/index")
-def hello():
+def index():
        return render_template('index.html')
 
+# Render a table of chemicals reachable from a start chemical by querying the
+# biochem4j.org graph DB. The final column contains a link to the /pathway link.
 @app.route("/chemical")
 def chemical():
+    # create the graph DB query
     max_length_chems = int(req.args.get("max_len", "0"))
     max_length_rels = (max_length_chems - 1) * 2
     query = """
@@ -23,14 +26,14 @@ RETURN s.name, s.id, s.formula, size(r) as len""" % (max_length_rels, req.args.g
         req.args.get("min_mw", ""))
     print(query)
 
+    # send the graph DB query request
     r = requests.post('http://biochem4j.org/db/data/transaction/commit',
         headers={'accept': 'application/json', 'content-type': 'application/json'},
         json={"statements":[{"statement": query}]})
     if r.status_code != 200:
         return "Error (%d): %s" % (r.status_code, r.text)
     
-    print(json.dumps(r.json(), indent=4, sort_keys=True))
-
+    # populate info needed for rendering the table
     fromChemical = {"id": req.args.get("chem_id", "")}
     chemicals = []
     for row_data in r.json()["results"][0]["data"]:
@@ -40,8 +43,10 @@ RETURN s.name, s.id, s.formula, size(r) as len""" % (max_length_rels, req.args.g
 
     return render_template('chemicals.html', fromChemical=fromChemical, chemicals=chemicals)
 
+# Render an interactive graph visualization with vis.js of the pathway between two chemicals.
 @app.route("/pathway")
 def pathway():
+    # create the graph DB query
     path_length_chems = int(req.args.get("path_len", "0"))
     max_length_rels = (path_length_chems - 1) * 2
     query = """
@@ -51,36 +56,37 @@ WHERE ALL (i IN idx WHERE r[i]['stoichiometry'] * r[i+1]['stoichiometry'] < 0)
 RETURN p""" % (req.args.get("id1", ""), max_length_rels, req.args.get("id2", ""))
     print(query)
 
+    # send the graph DB query request
     r = requests.post('http://biochem4j.org/db/data/transaction/commit',
         headers={'accept': 'application/json', 'content-type': 'application/json'},
         json={"statements":[{"statement": query}]})
     if r.status_code != 200:
         return "Error (%d): %s" % (r.status_code, r.text)
-    
-    print(json.dumps(r.json(), indent=4, sort_keys=True))
 
     meta = {"fromId": req.args.get("id1", ""), "toId": req.args.get("id2", ""),}
 
-    # populate nodes and edges for graph view
+    # populate nodes and edges need for rendering the graph view
     i = 0
     nodes = []
     edges = []
     for row_data in r.json()["results"][0]["data"]:
         for elem in row_data["row"][0]:
-            if "smiles" in elem:
+            if "smiles" in elem: # chemical node
                 nodes.append({"index": i, "name": elem["name"], "color": "cyan"})
                 if i > 0:
                     edges.append({"node1": i - 1, "node2": i})
                 i = i + 1
-            elif "balance" in elem:
+            elif "balance" in elem: # reaction node
                 nodes.append({"index": i, "name": elem["id"], "color": "red"})
                 if i > 0:
                     edges.append({"node1": i - 1, "node2": i})
                 i = i + 1
+            else: # other node or reference
+                pass
 
-    # return r.text
     return render_template('pathway.html', meta=meta, nodes=nodes, edges=edges)
 
+# Path for the AWS load balancer to ping to check health status
 @app.route("/ping")
 def ping():
     return "OK"
